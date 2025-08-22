@@ -1,4 +1,5 @@
 'use client'
+import RequireAuth from '@/app/components/RequireAuth'
 import Nav from '@/app/components/Nav'
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/app/lib/supabase'
@@ -43,6 +44,7 @@ export default function Expenses(){
 
   return (
     <>
+    <RequireAuth />
       <Nav/>
       <main className="max-w-6xl mx-auto p-4">
         <div className="flex flex-wrap gap-2 items-center mb-3">

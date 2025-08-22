@@ -1,4 +1,5 @@
 'use client';
+import RequireAuth from '@/app/components/RequireAuth'
 import Nav from '../../components/Nav';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
@@ -33,6 +34,7 @@ export default function NewSale(){
 
   return (
     <>
+    <RequireAuth />
       <Nav/>
       <main className="max-w-lg mx-auto p-4">
         <h1 className="text-xl font-semibold mb-3">Add Daily Sales</h1>

@@ -1,4 +1,5 @@
 'use client'
+import RequireAuth from '@/app/components/RequireAuth'
 import Nav from '@/app/components/Nav'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/app/lib/supabase'
@@ -42,6 +43,7 @@ export default function NewPO(){
 
   return (
     <>
+    <RequireAuth />
       <Nav/>
       <main className="max-w-3xl mx-auto p-4">
         <h1 className="text-2xl font-semibold mb-4">New Purchase Order</h1>
