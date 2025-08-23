@@ -5,9 +5,11 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/app/lib/supabase'
 
 function Icon({ path }: { path: string }) {
-  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="shrink-0">
-    <path d={path} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="shrink-0">
+      <path d={path} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
 }
 
 const icons = {
@@ -23,16 +25,38 @@ const icons = {
 export default function Nav(){
   const [user,setUser]=useState<any>(null)
   const [open,setOpen]=useState(false)
+
   useEffect(()=>{ supabase.auth.getUser().then(({data})=>setUser(data.user)) },[])
-  useEffect(()=>{ const k=(e:KeyboardEvent)=>e.key==='Escape'&&setOpen(false); window.addEventListener('keydown',k); return()=>window.removeEventListener('keydown',k)},[])
+
+  useEffect(()=>{
+    const k=(e:KeyboardEvent)=> e.key==='Escape' && setOpen(false)
+    window.addEventListener('keydown',k)
+    return ()=>window.removeEventListener('keydown',k)
+  },[])
+
+  // 🔒 Lock scroll and mark HTML while drawer is open (used by CSS to hide background pickers)
+  useEffect(()=>{
+    const html = document.documentElement
+    if (open) {
+      document.body.classList.add('overflow-hidden')
+      html.setAttribute('data-drawer','open')
+    } else {
+      document.body.classList.remove('overflow-hidden')
+      html.removeAttribute('data-drawer')
+    }
+    return () => {
+      document.body.classList.remove('overflow-hidden')
+      html.removeAttribute('data-drawer')
+    }
+  },[open])
 
   const links = [
-    { href:'/dashboard', label:'Dashboard', icon:icons.dashboard },
-    { href:'/sales/new', label:'Add Sale', icon:icons.sale },
-    { href:'/expenses', label:'Expenses', icon:icons.expenses },
-    { href:'/expenses/new', label:'Add Expense', icon:icons.add },
-    { href:'/po/new', label:'New PO', icon:icons.po },
-    { href:'/reports', label:'Reports', icon:icons.reports },
+    { href:'/dashboard',   label:'Dashboard',    icon:icons.dashboard },
+    { href:'/sales/new',   label:'Add Sale',     icon:icons.sale },
+    { href:'/expenses',    label:'Expenses',     icon:icons.expenses },
+    { href:'/expenses/new',label:'Add Expense',  icon:icons.add },
+    { href:'/po/new',      label:'New PO',       icon:icons.po },
+    { href:'/reports',     label:'Reports',      icon:icons.reports },
   ]
 
   const homeHref = user ? '/dashboard' : '/'
@@ -42,11 +66,9 @@ export default function Nav(){
       <nav className="w-full border-b bg-white">
         <div className="max-w-6xl mx-auto px-3 py-3 flex items-center gap-3">
           <Link href={homeHref} className="flex items-center gap-2">
-            {/* 150px logo */}
-            <Image src="/logo.png" alt="BabTooma" width={150} height={360} className="h-9 w-auto" />
+            <Image src="/logo.png" alt="BabTooma" width={150} height={36} className="h-9 w-auto" />
           </Link>
 
-          {/* desktop links */}
           {user && (
             <div className="hidden md:flex items-center gap-4 ml-4 text-sm text-slate-700">
               {links.map(l => (
@@ -61,21 +83,28 @@ export default function Nav(){
             {user ? (
               <button
                 className="text-sm bg-black hover:bg-neutral-800 text-white px-3 py-1.5 rounded-lg shadow-sm"
-                onClick={async ()=>{await supabase.auth.signOut();
-                  try { await fetch('/api/session', { method: 'DELETE' }); } catch {}location.href='/';}}
-              >Sign out</button>
+                onClick={async ()=>{
+                  await supabase.auth.signOut();
+                  try { await fetch('/api/session', { method: 'DELETE' }); } catch {}
+                  location.href='/';
+                }}
+              >
+                Sign out
+              </button>
             ) : null}
           </div>
 
-          {/* mobile hamburger */}
+          {/* Mobile hamburger with black bg */}
           {user && (
             <button
               aria-label="Open menu"
               aria-expanded={open}
               onClick={()=>setOpen(true)}
-              className="md:hidden ml-auto inline-flex items-center justify-center rounded-md border border-slate-300 px-3 py-2"
+              className="md:hidden ml-auto inline-flex items-center justify-center rounded-md px-3 py-2 bg-black text-white shadow-sm"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
             </button>
           )}
         </div>
@@ -84,24 +113,50 @@ export default function Nav(){
       {/* Off-canvas drawer */}
       {user && (
         <>
-          <div className={`fixed inset-0 bg-black/30 transition-opacity ${open?'opacity-100':'opacity-0 pointer-events-none'}`} onClick={()=>setOpen(false)} />
-          <aside className={`fixed top-0 left-0 h-full w-72 bg-white shadow-xl transition-transform duration-200 ${open? 'translate-x-0':'-translate-x-full'}`} role="dialog" aria-modal="true">
+          {/* Overlay above everything */}
+          <div
+            className={`fixed inset-0 bg-black/30 transition-opacity z-40 ${open?'opacity-100':'opacity-0 pointer-events-none'}`}
+            onClick={()=>setOpen(false)}
+          />
+
+          {/* Drawer panel */}
+          <aside
+            className={`fixed top-0 left-0 h-full w-72 bg-white shadow-xl transition-transform duration-200 z-50 ${open? 'translate-x-0':'-translate-x-full'}`}
+            role="dialog" aria-modal="true"
+          >
             <div className="p-4 border-b flex items-center justify-between">
-              <Image src="/logo.png" alt="BabTooma" width={220} height={28} className="h-7 w-auto" />
-              <button aria-label="Close menu" onClick={()=>setOpen(false)} className="rounded-md border border-slate-300 px-2 py-1">✕</button>
+              <Image src="/logo.png" alt="BabTooma" width={120} height={28} className="h-7 w-auto" />
+              {/* Close with black bg */}
+              <button
+                aria-label="Close menu"
+                onClick={()=>setOpen(false)}
+                className="rounded-md bg-black text-white px-2 py-1 shadow-sm"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </button>
             </div>
+
             <nav className="p-3 flex flex-col gap-2 text-slate-800">
               {links.map(l=>(
-                <Link key={l.href} href={l.href} onClick={()=>setOpen(false)} className="rounded-lg px-3 py-2 hover:bg-slate-100 flex items-center gap-2">
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  onClick={()=>setOpen(false)}
+                  className="rounded-lg px-3 py-2 hover:bg-slate-100 flex items-center gap-2"
+                >
                   <Icon path={l.icon} /> {l.label}
                 </Link>
               ))}
-              <button onClick={async ()=>{
-  await supabase.auth.signOut();
-  try { await fetch('/api/session', { method: 'DELETE' }); } catch {}
-  location.href='/';
-}}
- className="mt-2 text-left rounded-lg px-3 py-2 bg-black hover:bg-neutral-800 text-white flex items-center gap-2 shadow-sm">
+              <button
+                onClick={async ()=>{
+                  await supabase.auth.signOut();
+                  try { await fetch('/api/session', { method: 'DELETE' }); } catch {}
+                  location.href='/';
+                }}
+                className="mt-2 text-left rounded-lg px-3 py-2 bg-black hover:bg-neutral-800 text-white flex items-center gap-2 shadow-sm"
+              >
                 <Icon path={icons.logout} /> Sign out
               </button>
             </nav>

@@ -76,3 +76,19 @@ table, thead, tbody, tr, th, td { color:#0f172a; opacity:1 !important; }
 /* Keep controls visible in light UI on all devices */
 :root, html { color-scheme: light; }
 input, select, textarea, button { color-scheme: light; }
+/* Hide background native pickers when the mobile drawer is open (iOS Safari quirk) */
+html[data-drawer="open"] input[type="date"],
+html[data-drawer="open"] input[type="month"],
+html[data-drawer="open"] input[type="time"],
+html[data-drawer="open"] select {
+  visibility: hidden !important;      /* stop painting above overlay */
+  pointer-events: none !important;    /* no interactions behind drawer */
+}
+
+/* If you ever put inputs inside the drawer, keep them visible */
+html[data-drawer="open"] aside input,
+html[data-drawer="open"] aside select,
+html[data-drawer="open"] aside textarea {
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
