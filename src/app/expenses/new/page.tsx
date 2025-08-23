@@ -79,7 +79,7 @@ export default function NewExpense(){
             )}
           </div>
           <textarea placeholder="Notes" className="border p-2 rounded" value={notes} onChange={e=>setNotes(e.target.value)} />
-          <button className="w-full bg-black hover:bg-neutral-800 text-white p-2 rounded-lg">Save Expense</button>
+          <button className="bg-brand text-white px-4 py-2 rounded">Save Expense</button>
         </form>
       </main>
     </>

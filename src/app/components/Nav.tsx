@@ -5,11 +5,9 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/app/lib/supabase'
 
 function Icon({ path }: { path: string }) {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="shrink-0">
-      <path d={path} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  )
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="shrink-0">
+    <path d={path} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
 }
 
 const icons = {
@@ -25,36 +23,16 @@ const icons = {
 export default function Nav(){
   const [user,setUser]=useState<any>(null)
   const [open,setOpen]=useState(false)
-
   useEffect(()=>{ supabase.auth.getUser().then(({data})=>setUser(data.user)) },[])
-  useEffect(()=>{ 
-    const k=(e:KeyboardEvent)=> e.key==='Escape' && setOpen(false);
-    window.addEventListener('keydown',k);
-    return ()=>window.removeEventListener('keydown',k)
-  },[])
-
-  // 🔒 Body lock + attribute for extra mobile safety (iOS native pickers)
-  useEffect(()=>{
-    if (open) {
-      document.body.classList.add('overflow-hidden')
-      document.documentElement.setAttribute('data-drawer','open')
-    } else {
-      document.body.classList.remove('overflow-hidden')
-      document.documentElement.removeAttribute('data-drawer')
-    }
-    return () => {
-      document.body.classList.remove('overflow-hidden')
-      document.documentElement.removeAttribute('data-drawer')
-    }
-  }, [open])
+  useEffect(()=>{ const k=(e:KeyboardEvent)=>e.key==='Escape'&&setOpen(false); window.addEventListener('keydown',k); return()=>window.removeEventListener('keydown',k)},[])
 
   const links = [
-    { href:'/dashboard',   label:'Dashboard',    icon:icons.dashboard },
-    { href:'/sales/new',   label:'Add Sale',     icon:icons.sale },
-    { href:'/expenses',    label:'Expenses',     icon:icons.expenses },
-    { href:'/expenses/new',label:'Add Expense',  icon:icons.add },
-    { href:'/po/new',      label:'New PO',       icon:icons.po },
-    { href:'/reports',     label:'Reports',      icon:icons.reports },
+    { href:'/dashboard', label:'Dashboard', icon:icons.dashboard },
+    { href:'/sales/new', label:'Add Sale', icon:icons.sale },
+    { href:'/expenses', label:'Expenses', icon:icons.expenses },
+    { href:'/expenses/new', label:'Add Expense', icon:icons.add },
+    { href:'/po/new', label:'New PO', icon:icons.po },
+    { href:'/reports', label:'Reports', icon:icons.reports },
   ]
 
   const homeHref = user ? '/dashboard' : '/'
@@ -84,9 +62,7 @@ export default function Nav(){
               <button
                 className="text-sm border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-50"
                 onClick={()=>supabase.auth.signOut().then(()=>location.href='/')}
-              >
-                Sign out
-              </button>
+              >Sign out</button>
             ) : null}
           </div>
 
@@ -98,9 +74,7 @@ export default function Nav(){
               onClick={()=>setOpen(true)}
               className="md:hidden ml-auto inline-flex items-center justify-center rounded-md border border-slate-300 px-3 py-2"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
             </button>
           )}
         </div>
@@ -109,36 +83,19 @@ export default function Nav(){
       {/* Off-canvas drawer */}
       {user && (
         <>
-          {/* ⬆️ Added z-40 so it beats all inputs/pickers */}
-          <div
-            className={`fixed inset-0 bg-black/30 transition-opacity z-40 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-            onClick={()=>setOpen(false)}
-          />
-          {/* ⬆️ Added z-50 on drawer */}
-          <aside
-            className={`fixed top-0 left-0 h-full w-72 bg-white shadow-xl transition-transform duration-200 z-50 ${open ? 'translate-x-0' : '-translate-x-full'}`}
-            role="dialog"
-            aria-modal="true"
-          >
+          <div className={`fixed inset-0 bg-black/30 transition-opacity ${open?'opacity-100':'opacity-0 pointer-events-none'}`} onClick={()=>setOpen(false)} />
+          <aside className={`fixed top-0 left-0 h-full w-72 bg-white shadow-xl transition-transform duration-200 ${open? 'translate-x-0':'-translate-x-full'}`} role="dialog" aria-modal="true">
             <div className="p-4 border-b flex items-center justify-between">
               <Image src="/logo.png" alt="BabTooma" width={120} height={28} className="h-7 w-auto" />
               <button aria-label="Close menu" onClick={()=>setOpen(false)} className="rounded-md border border-slate-300 px-2 py-1">✕</button>
             </div>
             <nav className="p-3 flex flex-col gap-2 text-slate-800">
               {links.map(l=>(
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  onClick={()=>setOpen(false)}
-                  className="rounded-lg px-3 py-2 hover:bg-slate-100 flex items-center gap-2"
-                >
+                <Link key={l.href} href={l.href} onClick={()=>setOpen(false)} className="rounded-lg px-3 py-2 hover:bg-slate-100 flex items-center gap-2">
                   <Icon path={l.icon} /> {l.label}
                 </Link>
               ))}
-              <button
-                onClick={()=>supabase.auth.signOut().then(()=>location.href='/')}
-                className="mt-2 text-left rounded-lg px-3 py-2 border border-slate-300 hover:bg-slate-50 flex items-center gap-2"
-              >
+              <button onClick={()=>supabase.auth.signOut().then(()=>location.href='/')} className="mt-2 text-left rounded-lg px-3 py-2 border border-slate-300 hover:bg-slate-50 flex items-center gap-2">
                 <Icon path={icons.logout} /> Sign out
               </button>
             </nav>
