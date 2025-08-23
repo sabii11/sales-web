@@ -61,7 +61,8 @@ export default function Nav(){
             {user ? (
               <button
                 className="text-sm border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-50"
-                onClick={()=>supabase.auth.signOut().then(()=>location.href='/')}
+                onClick={async ()=>{await supabase.auth.signOut();
+                  try { await fetch('/api/session', { method: 'DELETE' }); } catch {}location.href='/';}}
               >Sign out</button>
             ) : null}
           </div>
@@ -95,7 +96,12 @@ export default function Nav(){
                   <Icon path={l.icon} /> {l.label}
                 </Link>
               ))}
-              <button onClick={()=>supabase.auth.signOut().then(()=>location.href='/')} className="mt-2 text-left rounded-lg px-3 py-2 border border-slate-300 hover:bg-slate-50 flex items-center gap-2">
+              <button onClick={async ()=>{
+  await supabase.auth.signOut();
+  try { await fetch('/api/session', { method: 'DELETE' }); } catch {}
+  location.href='/';
+}}
+ className="mt-2 text-left rounded-lg px-3 py-2 border border-slate-300 hover:bg-slate-50 flex items-center gap-2">
                 <Icon path={icons.logout} /> Sign out
               </button>
             </nav>
