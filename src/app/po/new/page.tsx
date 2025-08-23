@@ -46,7 +46,7 @@ export default function NewPO(){
     <RequireAuth />
       <Nav/>
       <main className="max-w-3xl mx-auto p-4">
-        <h1 className="text-2xl font-semibold mb-4">New Purchase Order</h1>
+        <h1 className="heading mb-4">New Purchase Order</h1>
         <form onSubmit={save} className="grid gap-3">
           <div className="grid md:grid-cols-3 gap-3">
             <input type="date" value={date} onChange={e=>setDate(e.target.value)} className="border p-2 rounded" />
@@ -76,7 +76,7 @@ export default function NewPO(){
           </div>
 
           <textarea placeholder="Notes" value={notes} onChange={e=>setNotes(e.target.value)} className="border p-2 rounded" />
-          <button className="bg-brand text-white px-4 py-2 rounded">Save PO</button>
+          <button className="btn-black">Save PO</button>
         </form>
       </main>
     </>

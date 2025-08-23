@@ -60,3 +60,19 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 html.dark {
   color-scheme: light !important;
 }
+/* ---------- App UI helpers (light-only) ---------- */
+.heading        { font-size: 1.5rem; line-height: 2rem; font-weight: 600; color: #1f2937; } /* text-2xl font-semibold text-slate-800 */
+.stat-label     { font-size: 0.875rem; line-height: 1.25rem; font-weight: 500; color: #334155; } /* text-sm font-medium text-slate-700 */
+.stat-value     { font-size: 1.5rem; line-height: 2rem; font-weight: 700; color: #0f172a; }     /* text-2xl font-bold text-slate-900 */
+
+.btn-black      { background:#000; color:#fff; border-radius:0.5rem; padding:0.5rem 0.75rem; }
+.btn-black:hover{ background:#171717; }
+
+.field { background:#fff; color:#0f172a; border:1px solid #cbd5e1; border-radius:0.5rem; padding:0.5rem; }
+
+/* Make sure tables never look faded */
+table, thead, tbody, tr, th, td { color:#0f172a; opacity:1 !important; }
+
+/* Keep controls visible in light UI on all devices */
+:root, html { color-scheme: light; }
+input, select, textarea, button { color-scheme: light; }

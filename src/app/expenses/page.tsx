@@ -48,7 +48,7 @@ export default function Expenses(){
       <Nav/>
       <main className="max-w-6xl mx-auto p-4">
         <div className="flex flex-wrap gap-2 items-center mb-3">
-          <h1 className="text-xl font-semibold">Expenses</h1>
+          <h1 className="heading mb-3">Expenses</h1>
           <input type="month" value={month} onChange={e=>setMonth(e.target.value)} className="border p-2 rounded" />
           <select value={cat} onChange={e=>setCat(e.target.value as any)} className="border p-2 rounded">
             {CATS.map(c=> <option key={c} value={c}>{c}</option>)}
@@ -59,7 +59,7 @@ export default function Expenses(){
               {branches.map(b=> <option key={b.id} value={b.id}>{b.name}</option>)}
             </select>
           )}
-          <button onClick={downloadCSV} className="ml-auto border px-3 py-2 rounded">CSV</button>
+          <button onClick={downloadCSV} className= "btn-black">CSV</button>
         </div>
         <div className="border rounded mb-3 p-3 bg-white">
           <div className="text-sm">Total</div>

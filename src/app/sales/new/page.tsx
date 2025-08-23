@@ -37,7 +37,8 @@ export default function NewSale(){
     <RequireAuth />
       <Nav/>
       <main className="max-w-lg mx-auto p-4">
-        <h1 className="text-xl font-semibold mb-3">Add Daily Sales</h1>
+        <h1 className="heading mb-4">Add Daily Sales</h1>
+
         <form onSubmit={save} className="space-y-3">
           <input type="date" value={date} onChange={e=>setDate(e.target.value)} className="w-full border p-2 rounded" />
           {profile?.role==='admin' && (
@@ -51,7 +52,8 @@ export default function NewSale(){
           <input placeholder="Card (£)" className="w-full border p-2 rounded" value={card} onChange={e=>setCard(e.target.value)} />
           <input placeholder="Online (£)" className="w-full border p-2 rounded" value={online} onChange={e=>setOnline(e.target.value)} />
           <textarea placeholder="Notes" className="w-full border p-2 rounded" value={notes} onChange={e=>setNotes(e.target.value)} />
-          <button className="w-full bg-black text-white p-2 rounded">Save</button>
+          <button className="w-full btn-black">Save</button>
+
         </form>
       </main>
     </>
