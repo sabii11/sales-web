@@ -121,76 +121,87 @@ export default function Dashboard() {
         </div>
 
         {/* Main chart by branch */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm mb-4">
-          <Bar
-            data={{
-              labels: Object.keys(byBranch),
-              datasets: [
-                {
-                  label: 'Sales by Branch',
-                  data: Object.values(byBranch) as number[],
-                  backgroundColor: 'rgba(14,116,144,0.35)',
-                  borderColor: 'rgba(14,116,144,0.9)',
-                  borderWidth: 1,
-                },
-              ],
-            }}
-            options={{
-              onClick: (_evt, elements) => {
-                if (elements.length) {
-                  const idx = (elements[0] as any).index as number
-                  setSelectedBranch(Object.keys(byBranch)[idx])
-                }
-              },
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: { legend: { position: 'top' as const } },
-              scales: {
-                y: { grid: { color: '#edf2f7' } },
-                x: { grid: { display: false } },
-              },
-            }}
-            height={320}
-          />
-        </div>
+<div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm mb-4">
+  {/* Give the chart a fixed height so mobile Safari can't stretch it */}
+  <div className="relative h-80"> {/* 20rem ≈ 320px */}
+    <Bar
+      data={{
+        labels: Object.keys(byBranch),
+        datasets: [
+          {
+            label: 'Sales by Branch',
+            data: Object.values(byBranch) as number[],
+            backgroundColor: 'rgba(14,116,144,0.35)',
+            borderColor: 'rgba(14,116,144,0.9)',
+            borderWidth: 1,
+          },
+        ],
+      }}
+      options={{
+        responsive: true,
+        maintainAspectRatio: false,   // <- important
+        resizeDelay: 200,             // smooth out Safari resize thrash
+        animation: false,             // prevents height creep
+        onClick: (_evt, elements) => {
+          if (elements.length) {
+            const idx = (elements[0] as any).index as number
+            setSelectedBranch(Object.keys(byBranch)[idx])
+          }
+        },
+        plugins: { legend: { position: 'top' as const } },
+        scales: {
+          y: { grid: { color: '#edf2f7' } },
+          x: { grid: { display: false } },
+        },
+      }}
+    />
+  </div>
+</div>
 
-        {/* Daily chart for selected branch (when a bar is tapped) */}
-        {selectedBranch && (
-          <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="font-medium text-slate-800">Daily sales: {selectedBranch}</h2>
-              <button
-                className="text-sm text-slate-600 underline"
-                onClick={() => setSelectedBranch(null)}
-              >
-                clear
-              </button>
-            </div>
-            <Bar
-              data={{
-                labels: daily.labels,
-                datasets: [
-                  {
-                    label: 'Daily Gross',
-                    data: daily.data,
-                    backgroundColor: 'rgba(99,102,241,0.35)',
-                    borderColor: 'rgba(99,102,241,0.9)',
-                    borderWidth: 1,
-                  },
-                ],
-              }}
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                  y: { grid: { color: '#edf2f7' } },
-                  x: { grid: { display: false } },
-                },
-              }}
-              height={280}
-            />
-          </div>
-        )}
+
+      {/* Daily chart for selected branch (when a bar is tapped) */}
+{selectedBranch && (
+  <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+    <div className="flex items-center justify-between mb-2">
+      <h2 className="font-medium text-slate-800">Daily sales: {selectedBranch}</h2>
+      <button
+        className="text-sm text-slate-600 underline"
+        onClick={() => setSelectedBranch(null)}
+      >
+        clear
+      </button>
+    </div>
+
+    {/* Fixed height to stop endless growth on mobile */}
+    <div className="relative h-72"> {/* 18rem ≈ 288px */}
+      <Bar
+        data={{
+          labels: daily.labels,
+          datasets: [
+            {
+              label: 'Daily Gross',
+              data: daily.data,
+              backgroundColor: 'rgba(99,102,241,0.35)',
+              borderColor: 'rgba(99,102,241,0.9)',
+              borderWidth: 1,
+            },
+          ],
+        }}
+        options={{
+          responsive: true,
+          maintainAspectRatio: false, // <- important
+          resizeDelay: 200,
+          animation: false,
+          scales: {
+            y: { grid: { color: '#edf2f7' } },
+            x: { grid: { display: false } },
+          },
+        }}
+      />
+    </div>
+  </div>
+)}
+
       </main>
     </>
   )
