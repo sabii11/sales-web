@@ -49,19 +49,20 @@ export default function Dashboard(){
       <Nav/>
       <main className="max-w-6xl mx-auto p-4">
         <div className="flex gap-3 items-center mb-4">
-          <h1 className="text-xl font-semibold">Dashboard</h1>
-          <div className={inputWrap}>
-            <input type="month" value={month} onChange={e=>setMonth(e.target.value)} className={inputBase}/>
-            <svg className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500" width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <path d="M7 2v4M17 2v4M3 9h18M5 5h14a2 2 0 0 1 2 2v13H3V7a2 2 0 0 1 2-2z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-        </div>
+          <h1 className="text-2xl font-semibold text-slate-800">Dashboard</h1>
+            <div className="bg-white border border-slate-200 rounded-2xl p-3 shadow-sm">
+              <div className="text-sm font-medium text-slate-700">Total Sales</div>
+                <div className="text-2xl font-bold text-slate-900">£{totalSales.toLocaleString()}</div>
+</div>
+<div className="bg-white border border-slate-200 rounded-2xl p-3 shadow-sm">
+  <div className="text-sm font-medium text-slate-700">Total Expenses</div>
+  <div className="text-2xl font-bold text-slate-900">£{totalExp.toLocaleString()}</div>
+</div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-          <div className="bg-white border border-slate-200 rounded-2xl p-3 shadow-sm"><div className="text-sm">Total Sales</div><div className="text-2xl font-bold">£{totalSales.toLocaleString()}</div></div>
-          <div className="bg-white border border-slate-200 rounded-2xl p-3 shadow-sm"><div className="text-sm">Total Expenses</div><div className="text-2xl font-bold">£{totalExp.toLocaleString()}</div></div>
-          <div className="bg-white border border-slate-200 rounded-2xl p-3 shadow-sm"><div className="text-sm">Profit</div><div className={`text-2xl font-bold ${profit>=0?'text-green-600':'text-red-600'}`}>£{profit.toLocaleString()}</div></div>
+<div className="bg-white border border-slate-200 rounded-2xl p-3 shadow-sm">
+  <div className="text-sm font-medium text-slate-700">Profit</div>
+  <div className={`text-2xl font-bold ${profit>=0?'text-green-600':'text-red-600'}`}>£{profit.toLocaleString()}</div>
+</div>
         </div>
 
         <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm mb-4">

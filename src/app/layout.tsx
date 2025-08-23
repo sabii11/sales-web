@@ -7,8 +7,13 @@ export const metadata = { title: 'BabTooma Admin' }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${poppins.className} min-h-dvh bg-gradient-to-b from-white to-slate-50 text-slate-900`}>
+    <html lang="en" className="h-full">
+      <head>
+        {/* Tell the UA we only support light UI */}
+        <meta name="color-scheme" content="light" />
+        <meta name="theme-color" content="#ffffff" />
+      </head>
+      <body className={`${poppins.className} min-h-dvh bg-white text-slate-900 antialiased`}>
         {children}
       </body>
     </html>

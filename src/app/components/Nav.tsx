@@ -43,7 +43,7 @@ export default function Nav(){
         <div className="max-w-6xl mx-auto px-3 py-3 flex items-center gap-3">
           <Link href={homeHref} className="flex items-center gap-2">
             {/* 150px logo */}
-            <Image src="/logo.png" alt="BabTooma" width={150} height={36} className="h-9 w-auto" />
+            <Image src="/logo.png" alt="BabTooma" width={150} height={360} className="h-9 w-auto" />
           </Link>
 
           {/* desktop links */}
@@ -60,7 +60,7 @@ export default function Nav(){
           <div className="ml-auto hidden md:block">
             {user ? (
               <button
-                className="text-sm border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-50"
+                className="text-sm bg-black hover:bg-neutral-800 text-white px-3 py-1.5 rounded-lg shadow-sm"
                 onClick={async ()=>{await supabase.auth.signOut();
                   try { await fetch('/api/session', { method: 'DELETE' }); } catch {}location.href='/';}}
               >Sign out</button>
@@ -87,7 +87,7 @@ export default function Nav(){
           <div className={`fixed inset-0 bg-black/30 transition-opacity ${open?'opacity-100':'opacity-0 pointer-events-none'}`} onClick={()=>setOpen(false)} />
           <aside className={`fixed top-0 left-0 h-full w-72 bg-white shadow-xl transition-transform duration-200 ${open? 'translate-x-0':'-translate-x-full'}`} role="dialog" aria-modal="true">
             <div className="p-4 border-b flex items-center justify-between">
-              <Image src="/logo.png" alt="BabTooma" width={120} height={28} className="h-7 w-auto" />
+              <Image src="/logo.png" alt="BabTooma" width={220} height={28} className="h-7 w-auto" />
               <button aria-label="Close menu" onClick={()=>setOpen(false)} className="rounded-md border border-slate-300 px-2 py-1">✕</button>
             </div>
             <nav className="p-3 flex flex-col gap-2 text-slate-800">
@@ -101,7 +101,7 @@ export default function Nav(){
   try { await fetch('/api/session', { method: 'DELETE' }); } catch {}
   location.href='/';
 }}
- className="mt-2 text-left rounded-lg px-3 py-2 border border-slate-300 hover:bg-slate-50 flex items-center gap-2">
+ className="mt-2 text-left rounded-lg px-3 py-2 bg-black hover:bg-neutral-800 text-white flex items-center gap-2 shadow-sm">
                 <Icon path={icons.logout} /> Sign out
               </button>
             </nav>

@@ -28,3 +28,35 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* Always light UI, even if device is dark */
+:root { color-scheme: light; }
+html { color-scheme: light; }
+html, body { background: #fff; }
+
+/* Prevent browsers from auto-inverting form controls in dark mode */
+input, select, textarea, button { color-scheme: light; }
+
+/* Make sure fields stay readable on light background */
+input, select, textarea {
+  background-color: #fff;
+  color: #0f172a; /* slate-900 */
+}
+
+/* Placeholder readability */
+input::placeholder, textarea::placeholder {
+  color: #94a3b8; /* slate-400 */
+  opacity: 1;
+}
+
+/* Date/month picker indicator should stay visible (WebKit) */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="month"]::-webkit-calendar-picker-indicator {
+  filter: none;
+  opacity: 1;
+}
+
+/* Optional: if a 'dark' class sneaks in from an extension, neutralize it */
+.dark &,
+html.dark {
+  color-scheme: light !important;
+}
