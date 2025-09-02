@@ -1,4 +1,5 @@
 'use client'
+export const dynamic = 'force-dynamic'
 import RequireAuth from '@/app/components/RequireAuth'
 import Nav from '@/app/components/Nav'
 import { useEffect, useMemo, useState } from 'react'

@@ -1,4 +1,5 @@
 'use client'
+export const dynamic = 'force-dynamic'
 import Nav from '@/app/components/Nav'
 import RequireAuth from '@/app/components/RequireAuth'
 import dayjs from 'dayjs'
