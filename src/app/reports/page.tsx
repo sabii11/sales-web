@@ -1,10 +1,18 @@
 'use client'
 export const dynamic = 'force-dynamic'
+
 import Nav from '@/app/components/Nav'
 import RequireAuth from '@/app/components/RequireAuth'
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/app/lib/supabase'
+
+// helper: robustly get branch name from relation (object OR array)
+function branchNameFrom(rel: any): string {
+  if (!rel) return ''
+  if (Array.isArray(rel)) return rel[0]?.name ?? ''
+  return rel?.name ?? ''
+}
 
 // quick CSV helper
 function toCSV(rows: any[]) {
@@ -43,7 +51,12 @@ export default function Reports(){
         .from('sales')
         .select('date, gross, cash, card, online, just_eat, uber_eats, click_collect, notes, branches(name)')
         .gte('date', start).lt('date', end).order('date')
-      setRows((data||[]).map(r => ({ ...r, branch: r.branches?.name })))
+
+      // 👇 avoid TS error by treating result rows as any and normalizing branch name
+      setRows((data ?? []).map((r: any) => ({
+        ...r,
+        branch: branchNameFrom(r.branches),
+      })))
     })()
   },[month])
 
